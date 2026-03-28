@@ -1,0 +1,79 @@
+name: Build FFmpeg on macOS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  macos-build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: build libmp3lame
+        run: |
+          # 因为 libmp3lame 托管在 sourceforge 上，没有直链，所以直接下载下来传到仓库里了
+          tar -xzf lame-3.100.tar.gz
+          cd lame-3.100
+
+          export MACOSX_DEPLOYMENT_TARGET=12.0
+
+          ./configure \
+            --prefix=/usr/local/opt/lame-3.100 \
+            --disable-shared \
+            --disable-frontend \
+            --enable-static \
+
+          make -j$(sysctl -n hw.ncpu)
+          sudo make install
+
+      - name: build ffmpeg
+        run: |
+          wget https://ffmpeg.org/releases/ffmpeg-8.0.tar.xz
+
+          tar -xf ffmpeg-8.0.tar.xz
+          cd ffmpeg-8.0
+
+          export MACOSX_DEPLOYMENT_TARGET=12.0
+
+          ./configure \
+            --prefix=/usr/local/opt/ffmpeg \
+            --disable-doc \
+            --disable-shared \
+            --disable-everything \
+            --disable-programs \
+            --disable-swscale \
+            --disable-filters \
+            --disable-swresample \
+            --disable-avx512 \
+            --disable-network \
+            --disable-avdevice \
+            --disable-autodetect \
+            --enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,m4a' \
+            --enable-muxer='mp4,flv,mp3,m4a,flac' \
+            --enable-decoder='h264,hevc,av1,aac,flac,eac3,ac3,mjpeg,png,webp' \
+            --enable-encoder='libmp3lame,flac' \
+            --enable-parser='mjpeg' \
+            --enable-static \
+            --enable-small \
+            --enable-ffmpeg \
+            --enable-protocol='file,concat' \
+            --enable-zlib \
+            --enable-libmp3lame \
+            --enable-gpl \
+            --extra-ldflags="-L/usr/local/opt/lame-3.100/lib" \
+            --extra-cflags="-I/usr/local/opt/lame-3.100/include" \
+
+          make -j$(sysctl -n hw.ncpu)
+          sudo make install
+
+      - name: verify ffmpeg
+        run: |
+          /usr/local/opt/ffmpeg/bin/ffmpeg -version
+
+      - name: upload ffmpeg
+        uses: actions/upload-artifact@v6
+        with:
+          name: ffmpeg-artifact
+          path: /usr/local/opt/ffmpeg

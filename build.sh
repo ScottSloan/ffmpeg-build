@@ -13,11 +13,11 @@ export ARCH=x86_64
 --disable-network \
 --disable-avdevice \
 --disable-autodetect \
---enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,m4a' \
---enable-muxer='mp4,flv,mp3,m4a,flac' \
+--enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,matroska' \
+--enable-muxer='mp4,flv,mp3,m4a,flac,matroska' \
 --enable-decoder='h264,hevc,av1,aac,flac,eac3,ac3,mjpeg,png,webp' \
 --enable-encoder='libmp3lame,flac' \
---enable-parser='mjpeg' \
+--enable-parser='mjpeg,h264,hevc,av1,aac,flac,ac3,eac3' \
 --enable-static \
 --enable-small \
 --enable-ffmpeg \

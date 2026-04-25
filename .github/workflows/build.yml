@@ -13,11 +13,10 @@ jobs:
 
       - name: build libmp3lame
         run: |
-          # 因为 libmp3lame 托管在 sourceforge 上，没有直链，所以直接下载下来传到仓库里了
           tar -xzf lame-3.100.tar.gz
           cd lame-3.100
 
-          export MACOSX_DEPLOYMENT_TARGET=11.0
+          export MACOSX_DEPLOYMENT_TARGET=12.0
 
           ./configure \
             --prefix=/usr/local/opt/lame-3.100 \
@@ -35,7 +34,7 @@ jobs:
           tar -xf ffmpeg-8.0.tar.xz
           cd ffmpeg-8.0
 
-          export MACOSX_DEPLOYMENT_TARGET=11.0
+          export MACOSX_DEPLOYMENT_TARGET=12.0
 
           ./configure \
             --prefix=/usr/local/opt/ffmpeg \

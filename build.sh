@@ -1,15 +1,9 @@
-export ARCH=x86_64
-
 ./configure \
 --prefix=/home/scott/build/opt/ffmpeg \
 --disable-doc \
 --disable-shared \
 --disable-everything \
---disable-programs \
---disable-swscale \
---disable-filters \
 --disable-swresample \
---disable-avx512 \
 --disable-network \
 --disable-avdevice \
 --disable-autodetect \

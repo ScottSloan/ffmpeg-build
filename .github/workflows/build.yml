@@ -29,10 +29,10 @@ jobs:
 
       - name: build ffmpeg
         run: |
-          wget https://ffmpeg.org/releases/ffmpeg-8.0.tar.xz
+          wget https://ffmpeg.org/releases/ffmpeg-8.1.2.tar.xz
 
-          tar -xf ffmpeg-8.0.tar.xz
-          cd ffmpeg-8.0
+          tar -xf ffmpeg-8.1.2.tar.xz
+          cd ffmpeg-8.1.2
 
           export MACOSX_DEPLOYMENT_TARGET=12.0
 

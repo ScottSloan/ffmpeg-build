@@ -7,7 +7,17 @@ on:
 
 jobs:
   macos-build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            os: macos-15-intel
+
+          - arch: aarch64
+            os: macos-latest
+
     steps:
       - uses: actions/checkout@v6
 
@@ -75,5 +85,5 @@ jobs:
       - name: upload ffmpeg
         uses: actions/upload-artifact@v6
         with:
-          name: ffmpeg-artifact
+          name: ffmpeg-artifact-${{ matrix.arch }}
           path: /usr/local/opt/ffmpeg

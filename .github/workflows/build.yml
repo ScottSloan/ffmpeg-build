@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: install nasm
+        if: matrix.arch == 'x86_64'
+        run: |
+          brew install nasm
+          nasm -v
+
       - name: build libmp3lame
         run: |
           tar -xzf lame-3.100.tar.gz

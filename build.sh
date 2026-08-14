@@ -7,10 +7,10 @@
 --disable-network \
 --disable-avdevice \
 --disable-autodetect \
---enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,matroska,image2' \
+--enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,matroska,image2,ass' \
 --enable-muxer='mp4,flv,mp3,m4a,flac,matroska' \
---enable-decoder='h264,hevc,av1,aac,flac,eac3,ac3,mjpeg,png,webp' \
---enable-encoder='libmp3lame,flac,mjpeg,png' \
+--enable-decoder='h264,hevc,av1,aac,flac,eac3,ac3,mjpeg,png,webp,ass' \
+--enable-encoder='libmp3lame,flac,mjpeg,png,ass' \
 --enable-parser='mjpeg,h264,hevc,av1,aac,flac,ac3,eac3' \
 --enable-bsf=h264_mp4toannexb \
 --enable-swscale \

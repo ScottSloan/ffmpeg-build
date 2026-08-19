@@ -3,10 +3,11 @@
 --disable-doc \
 --disable-shared \
 --disable-everything \
---disable-swresample \
+--disable-programs \
 --disable-network \
 --disable-avdevice \
 --disable-autodetect \
+--disable-avx512 \
 --enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,matroska,image2,ass' \
 --enable-muxer='mp4,flv,mp3,m4a,flac,matroska' \
 --enable-decoder='h264,hevc,av1,aac,flac,eac3,ac3,mjpeg,png,webp,ass' \
@@ -14,11 +15,10 @@
 --enable-parser='mjpeg,h264,hevc,av1,aac,flac,ac3,eac3' \
 --enable-bsf=h264_mp4toannexb \
 --enable-swscale \
---enable-filter=scale \
+--enable-filter='scale,format,null,copy,aresample,aformat,anull' \
 --enable-static \
---enable-small \
 --enable-ffmpeg \
---enable-protocol='file,concat' \
+--enable-protocol='file,concat,pipe' \
 --enable-zlib \
 --enable-libmp3lame \
 --enable-gpl \

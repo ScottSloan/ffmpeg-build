@@ -65,8 +65,8 @@ jobs:
             --disable-avdevice \
             --disable-autodetect \
             --disable-avx512 \
-            --enable-demuxer='concat,ffmetadata,mov,mp4,flv,m4a,mp3,matroska,image2,ass' \
-            --enable-muxer='mp4,flv,mp3,m4a,flac,matroska' \
+            --enable-demuxer='concat,ffmetadata,mov,mp4,flv,mp3,matroska,image2,ass' \
+            --enable-muxer='mp4,ipod,flv,mp3,flac,eac3,matroska' \
             --enable-decoder='h264,hevc,av1,aac,flac,eac3,ac3,mjpeg,png,webp,ass' \
             --enable-encoder='libmp3lame,flac,mjpeg,png,ass' \
             --enable-parser='mjpeg,h264,hevc,av1,aac,flac,ac3,eac3' \
@@ -88,6 +88,15 @@ jobs:
       - name: verify ffmpeg
         run: |
           /usr/local/opt/ffmpeg/bin/ffmpeg -version
+
+          # configure 遇到不存在的组件名只给一行 WARNING 并继续，产物里就悄悄少了这个组件
+          # （曾把 m4a 当成封装器名，实际 .m4a 对应的是 ipod）。这里按 Bili23 实际依赖的
+          # 封装器逐个确认，缺一个就让构建失败
+          muxers=$(/usr/local/opt/ffmpeg/bin/ffmpeg -hide_banner -muxers | awk '{print $2}')
+
+          for muxer in mp4 ipod flv mp3 flac eac3 matroska; do
+            echo "$muxers" | grep -qx "$muxer" || { echo "缺少封装器: $muxer"; exit 1; }
+          done
 
       - name: upload ffmpeg
         uses: actions/upload-artifact@v6

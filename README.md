@@ -17,8 +17,8 @@
 
 | 组件 | 启用项 |
 | --- | --- |
-| 解复用器 | concat、ffmetadata、mov、mp4、flv、m4a、mp3、matroska、image2、ass |
-| 复用器 | mp4、flv、mp3、m4a、flac、matroska |
+| 解复用器 | concat、ffmetadata、mov、mp4、flv、mp3、matroska、image2、ass |
+| 复用器 | mp4、ipod、flv、mp3、flac、eac3、matroska |
 | 解码器 | h264、hevc、av1、aac、flac、eac3、ac3、mjpeg、png、webp、ass |
 | 编码器 | libmp3lame、flac、mjpeg、png、ass |
 | 解析器 | mjpeg、h264、hevc、av1、aac、flac、ac3、eac3 |
@@ -123,7 +123,11 @@ ffmpeg -hide_banner -version
 
 ## 修改组件
 
-要支持新的格式或功能，在 `build.sh` 和 `build.yml` 中同步增加对应的 `--enable-*` 项。可以用以下命令查询可用组件的名称：
+要支持新的格式或功能，在 `build.sh` 和 `build.yml` 中同步增加对应的 `--enable-*` 项。
+
+组件名不一定等于文件扩展名：例如 `.m4a` 对应的复用器是 `ipod`，`.ec3` 对应的是 `eac3`。configure 遇到不存在的名字只会打印一行 `WARNING` 并继续，产物里就悄悄少了这个组件，FFmpeg 运行时只会报 `Unable to choose an output format`。`build.yml` 的 verify 步骤会逐个检查 Bili23 依赖的复用器，新增复用器时记得一并加进去。
+
+可以用以下命令查询可用组件的名称：
 
 ```bash
 ./configure --list-demuxers

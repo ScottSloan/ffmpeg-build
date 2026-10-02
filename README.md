@@ -31,11 +31,11 @@
 
 | 平台 | 构建方式 | 最低系统要求 |
 | --- | --- | --- |
-| Windows x64 | 本地 MSYS2 UCRT64（GCC）编译 | Windows 10 / 11；Windows 7 SP1 需安装 UCRT（KB2999226） |
+| Windows x64 | GitHub Actions 在 Ubuntu 上用 mingw-w64（GCC）交叉编译 | Windows 7 SP1 及以上 |
 | Linux amd64 / arm64 | 本地编译，全静态链接 | 不依赖 glibc，可在任意发行版运行 |
 | macOS aarch64 / x86_64 | GitHub Actions 编译 | macOS 12 Monterey |
 
-Windows 版同时用于 Windows 10 / 11 和 Windows 7。
+Windows 版同时用于 Windows 10 / 11 和 Windows 7。交叉编译的产物只依赖系统自带的 `msvcrt.dll`，不再需要 UCRT（KB2999226）；本地 MSYS2 UCRT64 编译的产物则依赖 UCRT。尚未在 Windows 7 实机上验证过交叉编译的产物。
 
 ## 编译
 
@@ -120,6 +120,8 @@ ffmpeg -hide_banner -version
 ## GitHub Actions
 
 [`build.yml`](.github/workflows/build.yml) 需手动触发，分别在 macOS arm64（`macos-latest`）和 Intel（`macos-15-intel`）上编译，产物以 `ffmpeg-artifact-<arch>` 的名称上传。
+
+Windows 版在 `ubuntu-latest` 上用 mingw-w64 交叉编译，产物名为 `ffmpeg-artifact-windows-x86_64`。本地 MSYS2 的 bash 与 make 基于 Cygwin 的进程模拟，configure 要启动几千个小进程，因此在 Windows 上编译很慢；换到 Linux 上用同一套 GCC 编译，速度快得多。实测两者性能一致（AAC 转 MP3、H.264 / HEVC 解码的耗时差在 2% 以内）。上文的 MSYS2 步骤保留，作为本地编译的备用方案。
 
 ## 修改组件
 
